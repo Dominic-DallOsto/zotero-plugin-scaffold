@@ -3,6 +3,7 @@ import pkg from "../package.json";
 import { Build, Config, Release, Serve } from "./index.js";
 import { Command } from "commander";
 import consola from "consola";
+import { isCI } from "std-env";
 import updateNotifier from "update-notifier";
 
 export default async function main() {
@@ -58,8 +59,17 @@ export default async function main() {
   cli
     .command("release")
     .description("Release.")
+    .option(
+      "github",
+      "upload assets to GitHub (default: false if is not ci)",
+      isCI ? false : true,
+    )
+    .option(
+      "version",
+      "increment version and git commit, push (default: true if is not in ci)",
+      isCI ? true : false,
+    )
     .action(async (options: any) => {
-      // consola.error("The release not yet implemented");
       process.env.NODE_ENV = "production";
       const config = await Config.loadConfig({});
       new Release(config).run();

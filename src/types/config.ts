@@ -86,12 +86,8 @@ export interface Config {
    * 发布相关配置
    *
    */
-  release: {
-    /**
-     * bumpp 配置
-     */
-    bumpp: VersionBumpOptions;
-  };
+  release: ReleaseConfig;
+
   /**
    * 日志级别
    *
@@ -271,4 +267,44 @@ export interface ServerConfig {
    * The lifecycle hook.
    */
   hooks: Partial<ServeHooks>;
+}
+
+export interface ReleaseConfig {
+  /**
+   * The release version or type. Can be one of the following:
+   *
+   * - The new version number (e.g. "1.23.456")
+   * - A release type (e.g. "major", "minor", "patch", "prerelease", etc.)
+   * - "prompt" to prompt the user for the version number
+   *
+   * @default "prompt"
+   */
+  version?: string | false;
+
+  /**
+   * The prerelease type (e.g. "alpha", "beta", "next").
+   *
+   * @default "beta"
+   */
+  preid?: string;
+
+  github?: {
+    release?: boolean;
+    releaseName?: string;
+    releaseNotes?: null;
+    comments?: {
+      submit?: boolean;
+      /**
+       * @default ":rocket: _This issue has been resolved in v${version}. See [${releaseName}](${releaseUrl}) for release notes._"
+       */
+      context?: string;
+    };
+  };
+
+  /**
+   * bumpp 配置
+   *
+   * @deprecated
+   */
+  bumpp: VersionBumpOptions;
 }
